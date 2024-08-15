@@ -6,16 +6,18 @@ class GraphSim {
         this.render();
     }
 
-    render(func) {
-        if (this.#canvas.getContext) {
-            const canvas = this.#canvas;
-            const ctx = canvas.getContext("2d");
+    render(func, scaleX, scaleY) {
+        if (!this.#canvas.getContext)
+            return;
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const canvas = this.#canvas;
+        const ctx = canvas.getContext("2d");
 
-            this.#drawXYAxis(canvas, ctx);
-            this.#drawRes(canvas, ctx, func);
-        }
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        this.#drawXYAxis(canvas, ctx);
+        this.#drawRes(canvas, ctx, func, scaleX, scaleY);
+    
     }
 
     #drawXYAxis(canvas, ctx) {
@@ -23,16 +25,21 @@ class GraphSim {
         ctx.fillRect(canvas.width/2, 0, 1, canvas.height) // Y Axis
     }
 
-    #drawRes(canvas, ctx, func = "") {
+    #drawRes(canvas, ctx, func, scaleX = 1, scaleY = 1) {
+        if (!func)
+            return;
+
         let lastX, lastY = null;
 
-        for(let i = 0; i < canvas.width; i++) {
+        // this.#drawLineBetween(ctx, {x: 0, y: 199}, {x: 1, y: 199})
+        for(let i = 0; i <= canvas.width; i++) {
             const x = i-canvas.width/2;
-            const y = math.evaluate(func, {x})
+            const y = scaleY*math.evaluate(func, {x: x/scaleX})
+            //same as: const y = math.evaluate(func, {x: x})
             //console.log(i, x, y)
             
-            if (lastX && lastY)
-                this.#drawLineBetween(ctx, {x: i, y: -y + canvas.height/2}, {x: lastX, y: lastY})
+            if (lastX != null && lastY != null)
+                this.#drawLineBetween(ctx, {x: lastX, y: lastY}, {x: i, y: -y + canvas.height/2})
 
             lastX = i; lastY = -y + canvas.height/2;
         }

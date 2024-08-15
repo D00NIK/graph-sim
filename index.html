@@ -9,10 +9,22 @@
     <link rel="stylesheet" href="index.css">
 </head>
 <body>
-    <canvas id="graph-sim" width="800px" height="800px"></canvas>
-    <script>const graph = new GraphSim("graph-sim");</script>
+    <canvas id="graph-sim" width="401px" height="401px"></canvas>
+    <script>
+    const graph = new GraphSim("graph-sim");
 
-    <input id="funcInput" type="text">
-    <button onclick="graph.render(document.getElementById('funcInput').value)">Render</button>
+    function drawGraph() {
+        const funcInput = document.getElementById('funcInput').value;
+        const scaleX = document.getElementById('scaleX').value;
+        const scaleY = document.getElementById('scaleY').value;
+        
+        graph.render(funcInput, scaleX, scaleY)
+    }
+    </script>
+
+    <input oninput="drawGraph()" id="funcInput" type="text">
+    <input oninput="drawGraph()" id="scaleX" type="range" min="5" max="200" value="50">
+    <input oninput="drawGraph()" id="scaleY" type="range" min="5" max="200" value="50">
+    <button onclick="drawGraph()">Render</button>
 </body>
 </html>
