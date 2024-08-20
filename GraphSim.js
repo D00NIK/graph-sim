@@ -38,8 +38,9 @@ class GraphSim {
             //same as: const y = math.evaluate(func, {x: x})
             //console.log(i, x, y)
             
-            if (lastX != null && lastY != null)
-                this.#drawLineBetween(ctx, {x: lastX, y: lastY}, {x: i, y: -y + canvas.height/2})
+            setTimeout(() => {
+                this.#drawLineBetween(ctx, { x: lastX, y: lastY }, { x: i, y: -y + canvas.height / 2 });
+            }, 10 * i); // Arrow function captures `this`
 
             lastX = i; lastY = -y + canvas.height/2;
         }
