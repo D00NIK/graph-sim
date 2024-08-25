@@ -17,32 +17,35 @@ class GraphSim {
 
         this.#drawXYAxis(canvas, ctx);
         this.#drawRes(canvas, ctx, func, scaleX, scaleY);
-    
     }
 
     #drawXYAxis(canvas, ctx) {
-        ctx.fillRect(0, canvas.height/2, canvas.width, 1) // X Axis
-        ctx.fillRect(canvas.width/2, 0, 1, canvas.height) // Y Axis
+        ctx.fillRect(0, canvas.height / 2, canvas.width, 1) // X Axis
+        ctx.fillRect(canvas.width / 2, 0, 1, canvas.height) // Y Axis
     }
 
-    #drawRes(canvas, ctx, func, scaleX = 1, scaleY = 1) {
+    #drawRes(canvas, ctx, func, scaleX = 1, scaleY = 1) { // Draw result
         if (!func)
             return;
 
         let lastX, lastY = null;
 
-        // this.#drawLineBetween(ctx, {x: 0, y: 199}, {x: 1, y: 199})
-        for(let i = 0; i <= canvas.width; i++) {
-            const x = i-canvas.width/2;
-            const y = scaleY*math.evaluate(func, {x: x/scaleX})
-            //same as: const y = math.evaluate(func, {x: x})
-            //console.log(i, x, y)
-            
+        var id = window.setTimeout(function () { }, 0);
+        while (id--) {
+            window.clearTimeout(id);
+        }
+
+        for (let i = 0; i <= canvas.width; i++) {
+            const x = i - canvas.width / 2;
+            const y = scaleY * math.evaluate(func, { x: x / scaleX })
+            //Same as: const y = math.evaluate(func, {x: x})
+
             setTimeout(() => {
                 this.#drawLineBetween(ctx, { x: lastX, y: lastY }, { x: i, y: -y + canvas.height / 2 });
+                console.log(lastX, lastY, i, -y + canvas.height / 2);
             }, 10 * i); // Arrow function captures `this`
 
-            lastX = i; lastY = -y + canvas.height/2;
+            lastX = i; lastY = -y + canvas.height / 2;
         }
     }
 
