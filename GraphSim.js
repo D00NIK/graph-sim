@@ -1,5 +1,6 @@
 class GraphSim {
     #canvas
+    #timeouts = []
 
     constructor(canvasId) {
         this.#canvas = document.getElementById(canvasId);
@@ -15,14 +16,17 @@ class GraphSim {
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+        this.#timeouts.forEach(clearTimeout)
+        this.#timeouts = []
+
         this.#drawXYAxis(canvas, ctx);
         this.#drawRes(canvas, ctx, func, scaleX, scaleY);
-    
+
     }
 
     #drawXYAxis(canvas, ctx) {
-        ctx.fillRect(0, canvas.height/2, canvas.width, 1) // X Axis
-        ctx.fillRect(canvas.width/2, 0, 1, canvas.height) // Y Axis
+        ctx.fillRect(0, canvas.height / 2, canvas.width, 1) // X Axis
+        ctx.fillRect(canvas.width / 2, 0, 1, canvas.height) // Y Axis
     }
 
     #drawRes(canvas, ctx, func, scaleX = 1, scaleY = 1) {
@@ -31,17 +35,14 @@ class GraphSim {
 
         let lastX, lastY = null;
 
-        // this.#drawLineBetween(ctx, {x: 0, y: 199}, {x: 1, y: 199})
-        for(let i = 0; i <= canvas.width; i++) {
-            const x = i-canvas.width/2;
-            const y = scaleY*math.evaluate(func, {x: x/scaleX})
-            //same as: const y = math.evaluate(func, {x: x})
-            //console.log(i, x, y)
-            
-            if (lastX != null && lastY != null)
-                this.#drawLineBetween(ctx, {x: lastX, y: lastY}, {x: i, y: -y + canvas.height/2})
+        for (let i = 0; i <= canvas.width; i++) {
+            const x = i - canvas.width / 2;
+            const y = scaleY * math.evaluate(func, { x: x / scaleX })
 
-            lastX = i; lastY = -y + canvas.height/2;
+            if (lastX != null && lastY != null)
+                this.#timeouts.push(setTimeout(this.#drawLineBetween, 4 * i, ctx, { x: lastX, y: lastY }, { x: i, y: -y + canvas.height / 2 }))
+
+            lastX = i; lastY = -y + canvas.height / 2;
         }
     }
 
