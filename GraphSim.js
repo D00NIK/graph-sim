@@ -47,7 +47,8 @@ class GraphSim {
             const y = scaleY * math.evaluate(func, { x: x / scaleX })
             //Same as: const y = math.evaluate(func, {x: x})
 
-            timeouts.push(setTimeout(this.#drawLineBetween, 4 * i, ctx, { x: lastX, y: lastY }, { x: i, y: -y + canvas.height / 2 }))
+            setTimeout(this.#drawLineBetween, 4 * i, ctx, { x: lastX, y: lastY }, { x: i, y: -y + canvas.height / 2 })
+            // timeouts.push(setTimeout(this.#drawLineBetween, 4 * i, ctx, { x: lastX, y: lastY }, { x: i, y: -y + canvas.height / 2 }))
 
             lastX = i; lastY = -y + canvas.height / 2;
         }
