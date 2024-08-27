@@ -14,17 +14,13 @@
     const graph = new GraphSim("graph-sim");
 
     function drawGraph() {
-        const funcInput = document.getElementById('funcInput').value;
-        const scaleX = document.getElementById('scaleX').value;
-        const scaleY = document.getElementById('scaleY').value;
-        
-        graph.render(funcInput, scaleX, scaleY)
+        graph.render(document.getElementById('funcInput').value)
     }
     </script>
 
     <input oninput="drawGraph()" id="funcInput" type="text">
-    <input oninput="drawGraph()" id="scaleX" type="range" min="5" max="200" value="50">
-    <input oninput="drawGraph()" id="scaleY" type="range" min="5" max="200" value="50">
+    <input oninput="graph.scaleX = this.value; drawGraph()" id="scaleX" type="range" min="5" max="200" value="50">
+    <input oninput="graph.scaleY = this.value; drawGraph()" id="scaleY" type="range" min="5" max="200" value="50">
     <button onclick="drawGraph()">Render</button>
 </body>
 </html>
